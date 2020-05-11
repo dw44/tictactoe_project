@@ -126,6 +126,7 @@ td:hover {
 	border: 2px solid black;
 	display: flex;
 	width: 50%;
+	min-width: 375px;
 	margin: 0 auto;
 	justify-content: space-evenly;
 }

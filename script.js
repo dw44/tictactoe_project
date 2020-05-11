@@ -1,8 +1,33 @@
-const game = (function() {
+const gameBoard = (function() {
+      
+    const board = [
+        document.getElementById('cell-0'),
+        document.getElementById('cell-1'),
+        document.getElementById('cell-2'),
+        document.getElementById('cell-3'),
+        document.getElementById('cell-4'),
+        document.getElementById('cell-5'),
+        document.getElementById('cell-6'),
+        document.getElementById('cell-7'),
+        document.getElementById('cell-8')        
+    ];
 
-    const _playerOne = player('Axe', 'X');
-    const _playerTwo = player('Leshrac', 'O');    
-    let _current = _playerOne;
+    const updateBoard = (marker, location) => {
+        board[location].textContent = marker;
+    }
+
+    return {
+        board,
+        updateBoard,
+    };
+
+})();
+
+/* ===================================================================================== */
+/* GAME LOGIC */
+
+
+const game = (function() {
 
     const _winningCombos = [ // all possible winning combinations in a game of TTT
         [0, 1, 2],
@@ -14,73 +39,94 @@ const game = (function() {
         [3, 4, 5],
         [6, 7, 8]
     ];
-    
-    // updated every turn
-    const _boardState = [null, null, null, null, null, null, null, null, null];
 
-    const _alternatePlayer = () => {
-        if (_current.symbol === 'X') {
-            _current = _playerTwo;
-        } else {
-            _current = _playerOne;
+    const _boardState = [null, null, null, null, null, null, null, null, null];
+    const playerOne = playerFactory('Player 1', 'X');
+    const playerTwo = playerFactory('Player 2', 'O');
+    let _activePlayer = playerOne;
+
+
+    const _resetGame = () => {
+        for (let i = 0; i < 9; ++i) {
+            _boardState[i] = null;
+            gameBoard.board[i].textContent = '';
+            _activePlayer = playerOne;
         }
     }
 
-    const _checkResult = () => {
+    const _togglePlayer = () => { // switch players
+        _activePlayer = (_activePlayer.marker === playerTwo.marker) ? playerOne : playerTwo;
+    }
+
+
+
+    const _endGame = () => {
         _winningCombos.forEach(combo => {
             if (_boardState[combo[0]] === _boardState[combo[1]] && 
                 _boardState[combo[1]] === _boardState[combo[2]] &&
                 _boardState[combo[0]] !== null) {
-                alert(`${_boardState[combo[0]]} WINS`);
-            }
+
+                    const winner = (_activePlayer.marker === playerOne.marker) ? playerTwo : playerOne;
+                    winner.increaseScore();
+
+                    document.getElementById('player-1-score').textContent = playerOne.getScore();
+
+                    document.getElementById('player-2-score').textContent = playerTwo.getScore();
+
+                    alert(`${winner.name} wins!!!`);
+
+                    _resetGame();
+                }
         });
-        board.forEach(cell => cell.addEventListener('click', () => {}));
+
+        if (_boardState.every(marker => marker !== null)) {
+            alert('Match Drawn!!!');
+            _resetGame();
+        }
+
     }
 
-    const board = [
-        document.getElementById('cell-0'),
-        document.getElementById('cell-1'),
-        document.getElementById('cell-2'),
-        document.getElementById('cell-3'),
-        document.getElementById('cell-4'),
-        document.getElementById('cell-5'),
-        document.getElementById('cell-6'),
-        document.getElementById('cell-7'),
-        document.getElementById('cell-8')
-    ];
-
-    // turn placeholder setup
 
     function turn() {
-        if (this.textContent.length !== 0) {
-            alert('Full');
-        } else {
-            this.textContent = _current.symbol;
-        }
-        _current.cells.push(Number(this.id[5]));
-        _boardState[Number(this.id[5])] = _current.symbol;
-        _checkResult();
-        console.log(_boardState);
-        _alternatePlayer(); // switch player
+        const target = Number(this.id[5]);
+        if (_boardState[target] === null) {
+            _boardState[target] = _activePlayer.marker;
+            this.textContent = _activePlayer.marker;
+            setTimeout(_endGame, 100); // call before togglePlayer or wrong player will be declared winner
+            _togglePlayer();
+        }        
     }
 
-    board.forEach(cell => cell.addEventListener('click', turn.bind(cell)));
+    gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
 
 
-    return {
-        board,
-    };
 
-/* END OF MODULE */
+
+
+    
 })();
 
 
-// Player Factory
-function player (name, symbol) {
-    const cells = [];
+
+
+
+
+
+
+/* ===================================================================================== */
+/* PLAYER */
+
+function playerFactory(name, marker, type='human') {
+    let _score = 0;
+    const increaseScore = () => ++_score;
+    const resetScore = () => _score = 0;
+    const getScore = () => _score;
     return {
-        name,
-        symbol,
-        cells
+        name, 
+        marker,
+        type,
+        increaseScore,
+        resetScore,
+        getScore
     };
 }
