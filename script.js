@@ -26,7 +26,6 @@ const gameBoard = (function() {
 /* ===================================================================================== */
 /* GAME LOGIC */
 
-
 const game = (function() {
 
     const _winningCombos = [ // all possible winning combinations in a game of TTT
@@ -44,7 +43,7 @@ const game = (function() {
     const playerOne = playerFactory('Player 1', 'X');
     const playerTwo = playerFactory('Player 2', 'O');
     let _activePlayer = playerOne;
-
+    document.getElementById('reset').addEventListener('click', _hardReset);
 
     const _resetGame = () => {
         for (let i = 0; i < 9; ++i) {
@@ -54,36 +53,35 @@ const game = (function() {
         }
     }
 
+    function _hardReset() {
+        playerOne.resetScore();
+        playerTwo.resetScore();
+        document.getElementById('player-1-score').textContent = playerOne.getScore();
+        document.getElementById('player-2-score').textContent = playerTwo.getScore();
+        _resetGame();
+    }
+
     const _togglePlayer = () => { // switch players
         _activePlayer = (_activePlayer.marker === playerTwo.marker) ? playerOne : playerTwo;
     }
-
-
 
     const _endGame = () => {
         _winningCombos.forEach(combo => {
             if (_boardState[combo[0]] === _boardState[combo[1]] && 
                 _boardState[combo[1]] === _boardState[combo[2]] &&
                 _boardState[combo[0]] !== null) {
-
                     const winner = (_activePlayer.marker === playerOne.marker) ? playerTwo : playerOne;
                     winner.increaseScore();
-
                     document.getElementById('player-1-score').textContent = playerOne.getScore();
-
                     document.getElementById('player-2-score').textContent = playerTwo.getScore();
-
                     alert(`${winner.name} wins!!!`);
-
                     _resetGame();
                 }
         });
-
         if (_boardState.every(marker => marker !== null)) {
             alert('Match Drawn!!!');
             _resetGame();
         }
-
     }
 
 

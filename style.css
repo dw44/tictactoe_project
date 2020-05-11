@@ -128,10 +128,28 @@ td:hover {
 	width: 50%;
 	min-width: 375px;
 	margin: 0 auto;
-	justify-content: space-evenly;
+	justify-content: space-between;
+	align-items: center;
+	padding: 10px;
 }
 
 .player {
-	margin: 20px;
+	font-size: 36px;
+}
+
+button {
+	border-radius: 5px;
+	border: none;
+	background-color: #61dbfb;
+	font-weight: bold;
+	width: 200px;
+	height: 60px;
 	font-size: 24px;
+	padding: 0 20px;
+	cursor: pointer;
+}
+
+button:hover {
+	background-color: #035efc;
+	color: #fff;
 }
