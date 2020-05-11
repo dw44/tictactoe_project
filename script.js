@@ -32,12 +32,13 @@ const game = (function() {
                 _boardState[combo[1]] === _boardState[combo[2]] &&
                 _boardState[combo[0]] !== null) {
                 alert(`${_boardState[combo[0]]} WINS`);
-                board.forEach(cell => cell.addEventListener('click', () => {}));
             }
         });
+        board.forEach(cell => cell.addEventListener('click', () => {}));
     }
 
     const board = [
+        document.getElementById('cell-0'),
         document.getElementById('cell-1'),
         document.getElementById('cell-2'),
         document.getElementById('cell-3'),
@@ -45,11 +46,10 @@ const game = (function() {
         document.getElementById('cell-5'),
         document.getElementById('cell-6'),
         document.getElementById('cell-7'),
-        document.getElementById('cell-8'),
-        document.getElementById('cell-9')
+        document.getElementById('cell-8')
     ];
 
-    // symbol placeholder setup
+    // turn placeholder setup
 
     function turn() {
         if (this.textContent.length !== 0) {
@@ -58,7 +58,7 @@ const game = (function() {
             this.textContent = _current.symbol;
         }
         _current.cells.push(Number(this.id[5]));
-        _boardState[Number(this.id[5]) - 1] = _current.symbol;
+        _boardState[Number(this.id[5])] = _current.symbol;
         _checkResult();
         console.log(_boardState);
         _alternatePlayer(); // switch player

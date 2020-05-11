@@ -6,7 +6,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="style.css">
-        <script src="script.js" defer></script>
+        <script src="script2.js" defer></script>
+        <style>
+            button {
+                border-radius: 5px;
+                width: 120px;
+                height: 60px;
+                border: none;
+                margin: 0 500px;
+            }
+        </style>
     </head>
     <body>
 		<header>
@@ -15,21 +24,24 @@
         
         <table id="game-board">
             <tr>
-                <td class="game-board-cell first-column board-top-row" id="cell-1"></td>
-                <td class="game-board-cell second-column board-top-row" id="cell-2"></td>
-                <td class="game-board-cell third-column board-top-row" id="cell-3"></td>
+                <td class="game-board-cell first-column board-top-row" id="cell-0"></td>
+                <td class="game-board-cell second-column board-top-row" id="cell-1"></td>
+                <td class="game-board-cell third-column board-top-row" id="cell-2"></td>
             </tr>
             <tr>
-                <td class="game-board-cell first-column board-mid-row" id="cell-4"></td>
-                <td class="game-board-cell second-column board-mid-row" id="cell-5"></td>
-                <td class="game-board-cell third-column board-mid-row" id="cell-6"></td>
+                <td class="game-board-cell first-column board-mid-row" id="cell-3"></td>
+                <td class="game-board-cell second-column board-mid-row" id="cell-4"></td>
+                <td class="game-board-cell third-column board-mid-row" id="cell-5"></td>
             </tr>
             <tr>
-                <td class="game-board-cell first-column board-bot-row" id="cell-7"></td>
-                <td class="game-board-cell second-column board-bot-row" id="cell-8"></td>
-                <td class="game-board-cell third-column board-bot-row" id="cell-9"></td>
+                <td class="game-board-cell first-column board-bot-row" id="cell-6"></td>
+                <td class="game-board-cell second-column board-bot-row" id="cell-7"></td>
+                <td class="game-board-cell third-column board-bot-row" id="cell-8"></td>
             </tr>
         </table>
-
+        <section id="scoreboard">
+            <p class="player">Player 1:&nbsp;&nbsp;<span id="player-1-score" class="current-score">0</span></p>
+            <p class="player">Player 2:&nbsp;&nbsp;<span id="player-2-score" class="current-score">0</span></p>
+        </section>
     </body>
 </html>

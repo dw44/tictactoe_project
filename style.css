@@ -101,15 +101,15 @@ td:hover {
 	background-color: aquamarine;
 }
 
-#cell-1, #cell-4,
-#cell-7, #cell-2,
-#cell-5, #cell-8 {
+#cell-0, #cell-3,
+#cell-6, #cell-1,
+#cell-4, #cell-7 {
 	border-right: 2px solid #000;
 }
 
-#cell-4, #cell-5,
-#cell-6, #cell-7,
-#cell-8, #cell-9 {
+#cell-3, #cell-4,
+#cell-5, #cell-6,
+#cell-7, #cell-8 {
 	border-top: 2px solid #000;
 }
 
@@ -119,4 +119,18 @@ td:hover {
 		height: 200px;
 		font-size: 160px;
 	}
+}
+
+/* SCOREBOARD */
+#scoreboard {
+	border: 2px solid black;
+	display: flex;
+	width: 50%;
+	margin: 0 auto;
+	justify-content: space-evenly;
+}
+
+.player {
+	margin: 20px;
+	font-size: 24px;
 }
