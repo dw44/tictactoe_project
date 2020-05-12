@@ -28,7 +28,7 @@ const gameBoard = (function() {
 
 const game = (function() {
 
-    const _winningCombos = [ // all possible winning combinations in a game of TTT
+    const winningCombos = [ // all possible winning combinations in a game of TTT
         [0, 1, 2],
         [0, 3, 6],
         [0, 4, 8],
@@ -39,70 +39,90 @@ const game = (function() {
         [6, 7, 8]
     ];
 
-    const _boardState = [null, null, null, null, null, null, null, null, null];
+    const boardState = [null, null, null, null, null, null, null, null, null];
     const softResetButton = document.getElementById('soft-reset');
     const hardResetButton = document.getElementById('reset');
     const playerOne = playerFactory('Player 1', 'X');
     const playerTwo = playerFactory('Player 2', 'O');
-    let _activePlayer = playerOne;
-    
-    const _resetGame = () => {
+
+    let win = false;
+    let activePlayer = playerOne;
+
+    gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
+    softResetButton.addEventListener('click', resetGame);
+    hardResetButton.addEventListener('click', hardReset);
+
+    function cleanBoard() {
         for (let i = 0; i < 9; ++i) {
-            _boardState[i] = null;
+            boardState[i] = null;
             gameBoard.board[i].textContent = '';
-            _activePlayer = playerOne;
-        }
-        softResetButton.disabled = true;
-        hardResetButton.disabled = true;
+            activePlayer = playerOne;
+        } 
+    }
+        
+    function resetGame() {
+        win = false;
+        cleanBoard();
+        enableGrid();
+        toggleDisabled(softResetButton, hardResetButton);
     }
 
-    const _togglePlayer = () => { // switch players
-        _activePlayer = (_activePlayer.marker === playerTwo.marker) ? playerOne : playerTwo;
+    function togglePlayer() { // switch players
+        activePlayer = (activePlayer.marker === playerTwo.marker) ? playerOne : playerTwo;
     }
 
-    const _endGame = () => {
-        _winningCombos.forEach(combo => {
-            if (_boardState[combo[0]] === _boardState[combo[1]] && 
-                _boardState[combo[1]] === _boardState[combo[2]] &&
-                _boardState[combo[0]] !== null) {
-                    const winner = (_activePlayer.marker === playerOne.marker) ? playerTwo : playerOne;
+    function toggleDisabled(...args) {
+        args.forEach(arg => arg.disabled = !arg.disabled);
+    }
+
+    function endGame() {
+        winningCombos.forEach(combo => {
+            if (boardState[combo[0]] === boardState[combo[1]] && 
+                boardState[combo[1]] === boardState[combo[2]] &&
+                boardState[combo[0]] !== null) {
+                    const winner = (activePlayer.marker === playerOne.marker) ? playerTwo : playerOne;
+                    win = true;
                     winner.increaseScore();
                     document.getElementById('player-1-score').textContent = playerOne.getScore();
                     document.getElementById('player-2-score').textContent = playerTwo.getScore();
                     alert(`${winner.name} wins!!!`);
-                    softResetButton.disabled = false;
-                    hardResetButton.disabled = false;
+                    disableGrid();
+                    toggleDisabled(softResetButton, hardResetButton, ...gameBoard.board);
                 }
         });
-        if (_boardState.every(marker => marker !== null)) {
+        if (boardState.every(marker => marker !== null) && !win) {
             alert('Match Drawn!!!');
-            softResetButton.disabled = false;
-            hardResetButton.disabled = false;
+            disableGrid();
+            toggleDisabled(softResetButton, hardResetButton);
         }
     }
 
     function turn() {
         const target = Number(this.id[5]);
-        if (_boardState[target] === null) {
-            _boardState[target] = _activePlayer.marker;
-            this.textContent = _activePlayer.marker;
-            setTimeout(_endGame, 100); // call before togglePlayer or wrong player will be declared winner
-            _togglePlayer();
+        if (boardState[target] === null) {
+            boardState[target] = activePlayer.marker;
+            this.textContent = activePlayer.marker;
+            setTimeout(endGame, 100); // call before togglePlayer or wrong player will be declared winner
+            togglePlayer();
         }        
     }
 
-    function _hardReset() {
+    function hardReset() {
+        win = false;
         playerOne.resetScore();
         playerTwo.resetScore();
         document.getElementById('player-1-score').textContent = playerOne.getScore();
         document.getElementById('player-2-score').textContent = playerTwo.getScore();
-        _resetGame();
+        resetGame();
+    }    
+
+    function disableGrid() {
+        gameBoard.board.forEach(cell => cell.removeEventListener('click', turn));
     }
 
-    gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
-    softResetButton.addEventListener('click', _resetGame);
-    hardResetButton.addEventListener('click', _hardReset);   
-
+    function enableGrid() {
+        gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
+    }
 })();
 
 /* ===================================================================================== */
