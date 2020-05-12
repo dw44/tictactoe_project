@@ -43,22 +43,13 @@ const game = (function() {
     const playerOne = playerFactory('Player 1', 'X');
     const playerTwo = playerFactory('Player 2', 'O');
     let _activePlayer = playerOne;
-    document.getElementById('reset').addEventListener('click', _hardReset);
-
+    
     const _resetGame = () => {
         for (let i = 0; i < 9; ++i) {
             _boardState[i] = null;
             gameBoard.board[i].textContent = '';
             _activePlayer = playerOne;
         }
-    }
-
-    function _hardReset() {
-        playerOne.resetScore();
-        playerTwo.resetScore();
-        document.getElementById('player-1-score').textContent = playerOne.getScore();
-        document.getElementById('player-2-score').textContent = playerTwo.getScore();
-        _resetGame();
     }
 
     const _togglePlayer = () => { // switch players
@@ -84,7 +75,6 @@ const game = (function() {
         }
     }
 
-
     function turn() {
         const target = Number(this.id[5]);
         if (_boardState[target] === null) {
@@ -95,21 +85,18 @@ const game = (function() {
         }        
     }
 
+    function _hardReset() {
+        playerOne.resetScore();
+        playerTwo.resetScore();
+        document.getElementById('player-1-score').textContent = playerOne.getScore();
+        document.getElementById('player-2-score').textContent = playerTwo.getScore();
+        _resetGame();
+    }
+
     gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
+    document.getElementById('reset').addEventListener('click', _hardReset);
 
-
-
-
-
-    
 })();
-
-
-
-
-
-
-
 
 /* ===================================================================================== */
 /* PLAYER */
