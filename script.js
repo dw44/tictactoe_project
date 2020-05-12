@@ -40,6 +40,8 @@ const game = (function() {
     ];
 
     const _boardState = [null, null, null, null, null, null, null, null, null];
+    const softResetButton = document.getElementById('soft-reset');
+    const hardResetButton = document.getElementById('reset');
     const playerOne = playerFactory('Player 1', 'X');
     const playerTwo = playerFactory('Player 2', 'O');
     let _activePlayer = playerOne;
@@ -50,6 +52,8 @@ const game = (function() {
             gameBoard.board[i].textContent = '';
             _activePlayer = playerOne;
         }
+        softResetButton.disabled = true;
+        hardResetButton.disabled = true;
     }
 
     const _togglePlayer = () => { // switch players
@@ -66,12 +70,14 @@ const game = (function() {
                     document.getElementById('player-1-score').textContent = playerOne.getScore();
                     document.getElementById('player-2-score').textContent = playerTwo.getScore();
                     alert(`${winner.name} wins!!!`);
-                    _resetGame();
+                    softResetButton.disabled = false;
+                    hardResetButton.disabled = false;
                 }
         });
         if (_boardState.every(marker => marker !== null)) {
             alert('Match Drawn!!!');
-            _resetGame();
+            softResetButton.disabled = false;
+            hardResetButton.disabled = false;
         }
     }
 
@@ -94,7 +100,8 @@ const game = (function() {
     }
 
     gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
-    document.getElementById('reset').addEventListener('click', _hardReset);
+    softResetButton.addEventListener('click', _resetGame);
+    hardResetButton.addEventListener('click', _hardReset);   
 
 })();
 

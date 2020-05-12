@@ -82,14 +82,13 @@ header > h1 {
 }
 
 /* GAME BOARD */
-
 table {
 	margin: 80px auto;
 }
 
 td {
-	width:120px;
-	height: 120px; 
+	min-width:120px;
+	min-height: 120px; 
 	cursor: pointer;
 	font-size: 80px;
 	font-weight: 900;
@@ -115,9 +114,9 @@ td:hover {
 
 @media (min-width: 768px) {
 	td {
-		width: 160px;
-		height: 160px;
-		font-size: 140px;
+		width: 150px;
+		height: 150px;
+		font-size: 120px;
 	}
 }
 

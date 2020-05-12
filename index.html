@@ -9,6 +9,7 @@
         <script src="script.js" defer></script>
     </head>
     <body>
+
 		<header>
 			<h1>TIC TAC TOE</h1>
         </header>
@@ -30,9 +31,11 @@
                 <td class="game-board-cell third-column board-bot-row" id="cell-8"></td>
             </tr>
         </table>
+
         <section id="scoreboard">
             <p class="player">Player 1:&nbsp;&nbsp;<span id="player-1-score" class="current-score">0</span></p>
-            <button id="reset">Reset</button>
+            <button id="soft-reset" disabled>New Round</button>
+            <button id="reset" disabled>Reset Game</button>
             <p class="player">Player 2:&nbsp;&nbsp;<span id="player-2-score" class="current-score">0</span></p>
         </section>
     </body>
