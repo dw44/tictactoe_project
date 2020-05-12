@@ -1,4 +1,5 @@
-const gameBoard = (function() {      
+const gameBoard = (function() {
+      
     const board = [
         document.getElementById('cell-0'),
         document.getElementById('cell-1'),
@@ -19,11 +20,14 @@ const gameBoard = (function() {
         board,
         updateBoard,
     };
+
 })();
 
+/* ===================================================================================== */
 /* GAME LOGIC */
 
 const game = (function() {
+
     const winningCombos = [ // all possible winning combinations in a game of TTT
         [0, 1, 2],
         [0, 3, 6],
@@ -42,7 +46,6 @@ const game = (function() {
     const playerTwo = playerFactory('Player 2', 'O');
 
     let win = false;
-    let winningCells = [null, null, null];
     let activePlayer = playerOne;
 
     gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
@@ -70,12 +73,6 @@ const game = (function() {
 
     function toggleDisabled(...args) {
         args.forEach(arg => arg.disabled = !arg.disabled);
-    }
-
-    function highlightWinningCells(first, second, third) {
-        gameBoard.board[first].classList.toggle('win');
-        gameBoard.board[second].classList.toggle('win');
-        gameBoard.board[third].classList.toggle('win');
     }
 
     function endGame() {

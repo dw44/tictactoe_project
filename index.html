@@ -16,27 +16,21 @@
         
         <table id="game-board">
             <tr>
-                <td class="game-board-cell first-column board-top-row" id="cell-0"></td>
-                <td class="game-board-cell second-column board-top-row" id="cell-1"></td>
-                <td class="game-board-cell third-column board-top-row" id="cell-2"></td>
+                <td class="game-board-cell first-column board-top-row" id="cell-0" disabled="false"></td>
+                <td class="game-board-cell second-column board-top-row" id="cell-1" disabled="false"></td>
+                <td class="game-board-cell third-column board-top-row" id="cell-2" disabled="false"></td>
             </tr>
             <tr>
-                <td class="game-board-cell first-column board-mid-row" id="cell-3"></td>
-                <td class="game-board-cell second-column board-mid-row" id="cell-4"></td>
-                <td class="game-board-cell third-column board-mid-row" id="cell-5"></td>
+                <td class="game-board-cell first-column board-mid-row" id="cell-3" disabled="false"></td>
+                <td class="game-board-cell second-column board-mid-row" id="cell-4" disabled="false"></td>
+                <td class="game-board-cell third-column board-mid-row" id="cell-5" disabled="false"></td>
             </tr>
             <tr>
-                <td class="game-board-cell first-column board-bot-row" id="cell-6"></td>
-                <td class="game-board-cell second-column board-bot-row" id="cell-7"></td>
-                <td class="game-board-cell third-column board-bot-row" id="cell-8"></td>
+                <td class="game-board-cell first-column board-bot-row" id="cell-6" disabled=false></td>
+                <td class="game-board-cell second-column board-bot-row" id="cell-7" disabled=false></td>
+                <td class="game-board-cell third-column board-bot-row" id="cell-8" disabled=false></td>
             </tr>
         </table>
-
-        <form id="new-game">
-            <input type="text" placeholder="Player 1">
-            <input type="text" placeholder="Player 2">
-            <button>Start Game</button>
-        </form>
 
         <section id="scoreboard">
             <p class="player">Player 1:&nbsp;&nbsp;<span id="player-1-score" class="current-score">0</span></p>
