@@ -188,37 +188,70 @@ const game = (function() {
     if (typeof(boardState[targetCell]) === 'number' ) {
       boardState[targetCell] = activePlayer.marker;
       this.textContent = activePlayer.marker;
-      console.log(boardState);
+      aiTurn(); // testing
       if (gameOver()) endGameHandler();
       togglePlayer();
+      if (activePlayer.type === 'computer' && !gameOver()) {
+        setTimeout(gameBoard.board[aiTurn()].click(), 2500);  
+      }
     }
   }
 
+  function aiTurn() {
+    return minimax([...boardState], playerTwo.marker).index;
+  }
 
+  function minimax(board, marker) {
+    const openSpots = board.filter(cell => cell !== 'X' && cell !== 'O');
 
+    if (win(board, playerOne.marker)) {
+      return {score: -10};
+    }
+    else if (win(board, playerTwo.marker)) {
+      return {score: 10};
+    }
+    else if (board.every(spot => spot === 'X' || spot === 'O')) {
+      return {score: 0};
+    }  
+    const moves = [];
 
+    for (let i = 0; i < openSpots.length; ++i) {
+      const move = {};
+      move.index = board[openSpots[i]];
+      
+      board[openSpots[i]] = marker;
+  
+      if (marker === playerTwo.marker) {
+        const result = minimax(board, playerOne.marker);
+        move.score = result.score;
+      } else {
+        const result = minimax(board, playerTwo.marker);
+        move.score = result.score;
+      }
+  
+      board[openSpots[i]] = move.index;
+      moves.push(move);
+    }
+  
+    let bestMove;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (marker === playerTwo.marker) {
+      let bestScore = -10000;
+      for (let i = 0; i < moves.length; ++i) {
+        if(moves[i].score > bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    } else {
+      let bestScore = 10000;
+      for (let i = 0; i < moves.length; ++i) {
+        if (moves[i].score < bestScore) {
+          bestScore = moves[i].score;
+          bestMove = i;
+        }
+      }
+    }
+    return moves[bestMove];
+  }
 })();

@@ -124,7 +124,7 @@ td:hover {
 #scoreboard {
 	border: 2px solid black;
 	display: flex;
-	width: 30%;
+	width: 40%;
 	min-width: 340px;
 	margin: 20px auto;
 	justify-content: space-between;
