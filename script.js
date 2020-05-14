@@ -60,7 +60,6 @@ const playerFactory = function (name, marker, type='human') {
 /* ===================================================================================== */
 
 const game = (function() {
-
   const initBtn = document.getElementById('submit-players');
   const playerTypes = document.getElementById('player-type');
   const modal = document.getElementById('modal');
@@ -84,7 +83,7 @@ const game = (function() {
     [2, 5, 8],
     [3, 4, 5],
     [6, 7, 8]
-  ]; // All possible winning combinations
+  ];
 
   let playerOne;
   let playerTwo;    
@@ -160,7 +159,7 @@ const game = (function() {
   }
 
   const draw = function(board) { // Tested - Working
-    // return true if board is full and neither player has won
+    // Return true if board is full and neither player has won
     return board.filter(n => n !== 'X' && n !== 'O').length === 0 &&
           !win(board, 'X') &&
           !win(board, 'O');
@@ -183,10 +182,21 @@ const game = (function() {
     }
     else if (draw(boardState)) {
       var result = "It's a Tie";
-    }
+    } 
     modal.style.display = 'flex';
     winnerDisplay.style.display = 'flex';
     roundWinner.textContent = result;
+  }
+
+  const aiTurn = function() { // Tested - Working
+    if (playerTwo.type === 'computer') {
+      return minimax([...boardState], playerTwo.marker).index;
+    } 
+    if (playerTwo.type === 'stupidComputer') {
+      // Returns index of a random unused slot
+      const open = [...boardState].filter(cell => cell !== 'X' && cell !== 'O');
+      return open[Math.floor(Math.random() * open.length)];
+    }
   }
 
   function turn() { // Tested - Working
@@ -194,29 +204,20 @@ const game = (function() {
     if (typeof(boardState[targetCell]) === 'number' ) {
       boardState[targetCell] = activePlayer.marker;
       this.textContent = activePlayer.marker;
-      aiTurn(); // testing
+      aiTurn();
       if (gameOver()) endGameHandler();
       togglePlayer();
+      // Plays computer/stupidComputer's turns automatically
       if (activePlayer.type === 'computer' || activePlayer.type === 'stupidComputer' && !gameOver()) {
         gameBoard.board[aiTurn()].click();  
       }
     }
   }
 
-  function aiTurn() { // Tested - Working
-    if (playerTwo.type === 'computer') {
-      return minimax([...boardState], playerTwo.marker).index;
-    } 
-    if (playerTwo.type === 'stupidComputer') {
-      const open = [...boardState].filter(cell => cell !== 'X' && cell !== 'O');
-      return open[Math.floor(Math.random() * open.length)];
-    }
-    
-  }
-
   function minimax(board, marker) { // Tested - Working
     const openSpots = board.filter(cell => cell !== 'X' && cell !== 'O');
 
+    // Check for win conditions / draw and return a score
     if (win(board, playerOne.marker)) {
       return {score: -10};
     }
@@ -225,13 +226,13 @@ const game = (function() {
     }
     else if (board.every(spot => spot === 'X' || spot === 'O')) {
       return {score: 0};
-    }  
+    } 
+
     const moves = [];
 
     for (let i = 0; i < openSpots.length; ++i) {
-      const move = {};
-      move.index = board[openSpots[i]];
-      
+      const move = {}; // Stores scores for each index
+      move.index = board[openSpots[i]];    
       board[openSpots[i]] = marker;
   
       if (marker === playerTwo.marker) {
@@ -243,11 +244,12 @@ const game = (function() {
       }
   
       board[openSpots[i]] = move.index;
+      // Add move object to list of possible moves 
       moves.push(move);
     }
   
     let bestMove;
-
+    // Pick move with highest score for ai's turn
     if (marker === playerTwo.marker) {
       let bestScore = -10000;
       for (let i = 0; i < moves.length; ++i) {
@@ -256,7 +258,7 @@ const game = (function() {
           bestMove = i;
         }
       }
-    } else {
+    } else { // Pick move with lowest score for human
       let bestScore = 10000;
       for (let i = 0; i < moves.length; ++i) {
         if (moves[i].score < bestScore) {
