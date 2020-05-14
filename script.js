@@ -17,11 +17,11 @@ const gameBoard = (function() {
       document.getElementById('cell-8')        
   ];
 
-  const updateBoard = (marker, location) => {
+  const updateBoard = (marker, location) => { // Tested - Working
       board[location].textContent = marker;
   }
-
-  const clearBoard = () => {
+ 
+  const clearBoard = () => { // Tested - Working
     board.forEach(cell => {
       cell.textContent = '';
     });
@@ -41,9 +41,9 @@ const gameBoard = (function() {
 
 const playerFactory = function (name, marker, type='human') {
   let _score = 0;
-  const increaseScore = () => ++_score;
-  const resetScore = () => _score = 0;
-  const getScore = () => _score;
+  const increaseScore = () => ++_score; // Tested - Working
+  const resetScore = () => _score = 0; // Tested - Working
+  const getScore = () => _score; // Tested - Working
 
   return {
       name, 
@@ -95,24 +95,29 @@ const game = (function() {
   hardResetBtn.addEventListener('click', hardReset);
   gameBoard.board.forEach(cell => cell.addEventListener('click', turn));
 
-  const createPlayers = function(ai = false) { // Tested - Working
-    if (ai === true) {
+  const createPlayers = function(stupid = false, ai = false) { // Tested - Working
+    if (stupid === false && ai) {
       playerOne = playerFactory(document.getElementById('p1-name').value || 'Axe', 'X');
       playerTwo = playerFactory(document.getElementById('p2-name').value || 'Computer', 'O', 'computer');
+    }
+    else if (stupid && ai) {
+      playerOne = playerFactory(document.getElementById('p1-name').value || 'Axe', 'X');
+      playerTwo = playerFactory(document.getElementById('p2-name').value || 'Computer', 'O', 'stupidComputer');
     } else {
       playerOne = playerFactory(document.getElementById('p1-name').value || 'Axe', 'X');
       playerTwo = playerFactory(document.getElementById('p2-name').value || 'Leshrac', 'O');
     }
   }
 
-  const clearState = () => {
+  const clearState = () => { // Tested - Working
     for (let i = 0; i < 9; ++i) {
       boardState[i] = i;
     }
   }
 
   function initializePlayers() { // Tested - Working
-    if (playerTypes.value === 'computer') createPlayers(true);
+    if (playerTypes.value === 'computer') createPlayers(false, true);
+    else if (playerTypes.value === 'stupid-computer') createPlayers(true, true);
     else createPlayers();
     // Initializing early game variables
     activePlayer = playerOne;
@@ -130,7 +135,7 @@ const game = (function() {
     winnerDisplay.style.display = 'none';
   }
 
-  function hardReset() {
+  function hardReset() { // Tested - Working
     clearState();
     gameBoard.clearBoard();
     playerOne = undefined;
@@ -155,6 +160,7 @@ const game = (function() {
   }
 
   const draw = function(board) { // Tested - Working
+    // return true if board is full and neither player has won
     return board.filter(n => n !== 'X' && n !== 'O').length === 0 &&
           !win(board, 'X') &&
           !win(board, 'O');
@@ -164,7 +170,7 @@ const game = (function() {
     return win(boardState, 'X') || win(boardState, 'O') || draw(boardState);
   }
 
-  const endGameHandler = function() {
+  const endGameHandler = function() { // Tested - Working
     if (win(boardState, 'X')) {
       playerOne.increaseScore();
       playerOneScore.textContent = playerOne.getScore();
@@ -183,7 +189,7 @@ const game = (function() {
     roundWinner.textContent = result;
   }
 
-  function turn() {
+  function turn() { // Tested - Working
     const targetCell = Number(this.id[5]);
     if (typeof(boardState[targetCell]) === 'number' ) {
       boardState[targetCell] = activePlayer.marker;
@@ -191,17 +197,24 @@ const game = (function() {
       aiTurn(); // testing
       if (gameOver()) endGameHandler();
       togglePlayer();
-      if (activePlayer.type === 'computer' && !gameOver()) {
-        setTimeout(gameBoard.board[aiTurn()].click(), 2500);  
+      if (activePlayer.type === 'computer' || activePlayer.type === 'stupidComputer' && !gameOver()) {
+        gameBoard.board[aiTurn()].click();  
       }
     }
   }
 
-  function aiTurn() {
-    return minimax([...boardState], playerTwo.marker).index;
+  function aiTurn() { // Tested - Working
+    if (playerTwo.type === 'computer') {
+      return minimax([...boardState], playerTwo.marker).index;
+    } 
+    if (playerTwo.type === 'stupidComputer') {
+      const open = [...boardState].filter(cell => cell !== 'X' && cell !== 'O');
+      return open[Math.floor(Math.random() * open.length)];
+    }
+    
   }
 
-  function minimax(board, marker) {
+  function minimax(board, marker) { // Tested - Working
     const openSpots = board.filter(cell => cell !== 'X' && cell !== 'O');
 
     if (win(board, playerOne.marker)) {
