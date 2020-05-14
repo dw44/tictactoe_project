@@ -13,30 +13,51 @@
 		<header>
 			<h1>TIC TAC TOE</h1>
         </header>
-        
-        <table id="game-board">
-            <tr>
-                <td class="game-board-cell first-column board-top-row" id="cell-0" disabled="false"></td>
-                <td class="game-board-cell second-column board-top-row" id="cell-1" disabled="false"></td>
-                <td class="game-board-cell third-column board-top-row" id="cell-2" disabled="false"></td>
-            </tr>
-            <tr>
-                <td class="game-board-cell first-column board-mid-row" id="cell-3" disabled="false"></td>
-                <td class="game-board-cell second-column board-mid-row" id="cell-4" disabled="false"></td>
-                <td class="game-board-cell third-column board-mid-row" id="cell-5" disabled="false"></td>
-            </tr>
-            <tr>
-                <td class="game-board-cell first-column board-bot-row" id="cell-6" disabled=false></td>
-                <td class="game-board-cell second-column board-bot-row" id="cell-7" disabled=false></td>
-                <td class="game-board-cell third-column board-bot-row" id="cell-8" disabled=false></td>
-            </tr>
-        </table>
+
+        <div id="modal">
+            <div id="modal-container">
+                <div id="show-winner">
+                    <h1 style="font-size: 2em" id="winner-name"></h1>                    
+                    <button id="soft-reset">New Round</button>
+                    <button id="reset">Reset Game</button>
+                </div>
+                <section id="new-game">
+                    <h1 style="text-align: center;">Enter Info</h1>
+                    <input type="text" id="p1-name" placeholder="Player 1">    
+                    <input type="text" id="p2-name" placeholder="Player 2">
+                    <select id="player-type">
+                        <option value="human">Player vs Player</option>
+                        <option value="computer">Play Against Computer</option>
+                    </select> 
+                    <button id="submit-players">Submit</button>
+                </section>
+            </div>        
+        </div>
+
+        <div id="main">
+            <table id="game-board">
+                <tr>
+                    <td class="game-board-cell first-column board-top-row" id="cell-0"></td>
+                    <td class="game-board-cell second-column board-top-row" id="cell-1"></td>
+                    <td class="game-board-cell third-column board-top-row" id="cell-2"></td>
+                </tr>
+                <tr>
+                    <td class="game-board-cell first-column board-mid-row" id="cell-3"></td>
+                    <td class="game-board-cell second-column board-mid-row" id="cell-4"></td>
+                    <td class="game-board-cell third-column board-mid-row" id="cell-5"></td>
+                </tr>
+                <tr>
+                    <td class="game-board-cell first-column board-bot-row" id="cell-6"></td>
+                    <td class="game-board-cell second-column board-bot-row" id="cell-7"></td>
+                    <td class="game-board-cell third-column board-bot-row" id="cell-8"></td>
+                </tr>
+            </table>        
+        </div>
 
         <section id="scoreboard">
-            <p class="player">Player 1:&nbsp;&nbsp;<span id="player-1-score" class="current-score">0</span></p>
-            <button id="soft-reset" disabled>New Round</button>
-            <button id="reset" disabled>Reset Game</button>
-            <p class="player">Player 2:&nbsp;&nbsp;<span id="player-2-score" class="current-score">0</span></p>
+            <p class="player"><span id="player-1-title">Axe</span>:&nbsp;&nbsp;<span id="player-1-score" class="current-score">0</span></p>
+            <p class="player"><span id="player-2-title">Leshrac</span>:&nbsp;&nbsp;<span id="player-2-score" class="current-score">0</span></p>
         </section>
+
     </body>
 </html>
